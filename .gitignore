@@ -1,0 +1,37 @@
+# Sistema
+.DS_Store
+
+# Variables de entorno
+.env
+
+# VS Code
+.vscode/
+
+# IntelliJ
+.idea/
+
+# Backend - Maven / Java
+backend/target/
+backend/.mvn/wrapper/maven-wrapper.jar
+
+# Spring / Java extra
+backend/.classpath
+backend/.factorypath
+backend/.project
+backend/.settings/
+backend/.apt_generated
+backend/.springBeans
+backend/.sts4-cache
+
+# IntelliJ dentro de backend
+backend/*.iws
+backend/*.iml
+backend/*.ipr
+
+# NetBeans dentro de backend
+backend/nbproject/private/
+backend/nbbuild/
+backend/dist/
+backend/nbdist/
+backend/.nb-gradle/
+backend/build/
