@@ -25,8 +25,8 @@ public class CuentaCloudService {
     private final UsuarioService usuarioService;
     private final AwsCredentialValidationService awsCredentialValidationService;
 
-    public CuentaCloud registrarCuenta(Long usuarioId, RegistrarCuentaRequest request) {
-        Usuario usuario = usuarioService.buscarPorId(usuarioId);
+    public CuentaCloud registrarMiCuenta(String auth0Id, RegistrarCuentaRequest request) {
+        Usuario usuario = usuarioService.buscarPorAuth0Id(auth0Id);
 
         cuentaCloudRepository.findByProveedorAndExternalAccountId(
                 request.proveedor(),
@@ -59,8 +59,9 @@ public class CuentaCloudService {
     }
 
     @Transactional(readOnly = true)
-    public List<CuentaCloud> listarPorUsuario(Long usuarioId) {
-        return cuentaCloudRepository.findByUsuarioId(usuarioId);
+    public List<CuentaCloud> listarMisCuentas(String auth0Id) {
+        Usuario usuario = usuarioService.buscarPorAuth0Id(auth0Id);
+        return cuentaCloudRepository.findByUsuarioId(usuario.getId());
     }
 
     @Transactional(readOnly = true)

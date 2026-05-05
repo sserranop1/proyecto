@@ -1,0 +1,7 @@
+artifact_bucket_name = "tu-bucket-unico"
+jar_file_path        = "../target/backend-0.0.1-SNAPSHOT.jar"
+ami_id               = "ami-xxxxxxxx"
+db_username          = "postgres"
+db_password          = "cambia-esto"
+auth0_issuer         = "https://tu-dominio.auth0.com/"
+auth0_audience       = "https://api.proyecto.backend"

@@ -1,0 +1,42 @@
+#!/bin/bash
+set -euxo pipefail
+
+apt-get update -y
+apt-get install -y openjdk-17-jre-headless awscli
+
+mkdir -p /opt/app
+
+aws s3 cp s3://${artifact_bucket}/${artifact_key} /opt/app/backend.jar --region ${aws_region}
+
+cat >/opt/app/application-prod.properties <<EOF
+server.port=${server_port}
+
+spring.datasource.url=${db_url}
+spring.datasource.username=${db_username}
+spring.datasource.password=${db_password}
+spring.jpa.hibernate.ddl-auto=update
+
+spring.security.oauth2.resourceserver.jwt.issuer-uri=${auth0_issuer}
+auth0.audience=${auth0_audience}
+EOF
+
+cat >/etc/systemd/system/backend.service <<EOF
+[Unit]
+Description=Spring Boot Backend
+After=network.target
+
+[Service]
+User=root
+WorkingDirectory=/opt/app
+ExecStart=/usr/bin/java -jar /opt/app/backend.jar --spring.config.additional-location=file:/opt/app/application-prod.properties
+SuccessExitStatus=143
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl enable backend
+systemctl restart backend

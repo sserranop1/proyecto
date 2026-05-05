@@ -4,6 +4,8 @@ import com.proyecto.backend.dto.RegistrarCuentaRequest;
 import com.proyecto.backend.model.CuentaCloud;
 import com.proyecto.backend.service.CuentaCloudService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,17 +17,17 @@ public class CuentaCloudController {
 
     private final CuentaCloudService cuentaCloudService;
 
-    @PostMapping("/usuario/{usuarioId}")
+    @PostMapping
     public CuentaCloud registrarCuenta(
-            @PathVariable Long usuarioId,
+            @AuthenticationPrincipal Jwt jwt,
             @RequestBody RegistrarCuentaRequest request
     ) {
-        return cuentaCloudService.registrarCuenta(usuarioId, request);
+        return cuentaCloudService.registrarMiCuenta(jwt.getSubject(), request);
     }
 
-    @GetMapping("/usuario/{usuarioId}")
-    public List<CuentaCloud> listarPorUsuario(@PathVariable Long usuarioId) {
-        return cuentaCloudService.listarPorUsuario(usuarioId);
+    @GetMapping
+    public List<CuentaCloud> listarMisCuentas(@AuthenticationPrincipal Jwt jwt) {
+        return cuentaCloudService.listarMisCuentas(jwt.getSubject());
     }
 
     @GetMapping("/{cuentaId}")
